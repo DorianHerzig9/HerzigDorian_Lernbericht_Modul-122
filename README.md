@@ -19,24 +19,44 @@ Die Informationen wurden formatiert und anschließend auf der Konsole ausgegeben
 ```
 
 2. Code-Fetzen:
-```powershell
+```PowerShell
 while ($true) {
     $computerName = $env:COMPUTERNAME
-    $performanceData = Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Processor -ComputerName $computerName
-    $cpuUsage = $performanceData.PercentProcessorTime
+
+    # CPU-Auslastung
+    $cpuData = Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Processor -ComputerName $computerName
+    $cpuUsage = $cpuData.PercentProcessorTime
+    $cpuUsageFormatted = "{0:N2}%" -f $cpuUsage
+
+    # Verfügbarer Arbeitsspeicher
     $memoryData = Get-WmiObject -Class Win32_OperatingSystem -ComputerName $computerName
     $availableMemory = $memoryData.FreePhysicalMemory / 1MB
     $totalMemory = $memoryData.TotalVisibleMemorySize / 1MB
-
-    $cpuUsageFormatted = "{0:N2}%" -f $cpuUsage
     $availableMemoryFormatted = "{0:N2} MB" -f $availableMemory
     $totalMemoryFormatted = "{0:N2} MB" -f $totalMemory
 
+    # Festplattenspeicher
+    $diskData = Get-WmiObject -Class Win32_LogicalDisk -ComputerName $computerName
+    $diskUsage = $diskData | ForEach-Object { $_.DeviceID + ": " + "{0:N2} GB" -f ($_.Size / 1GB) }
+    $diskUsageFormatted = $diskUsage -join ", "
+
+    # Netzwerknutzung
+    $networkData = Get-WmiObject -Class Win32_PerfFormattedData_Tcpip_NetworkInterface -ComputerName $computerName
+    $networkUsage = $networkData | ForEach-Object { $_.Name + ": " + "{0:N2} bytes/sec" -f $_.BytesTotalPerSec }
+    $networkUsageFormatted = $networkUsage -join ", "
+
+    # Systemzeit
+    $systemTime = Get-Date
+
+    # Ausgabe der PC-Werte
     Write-Host "PC-Leistungsübersicht für $computerName"
     Write-Host "---------------------------------------"
-    Write-Host "CPU-Auslastung       : $cpuUsageFormatted"
-    Write-Host "Verfügbarer Arbeitsspeicher : $availableMemoryFormatted"
-    Write-Host "Gesamter Arbeitsspeicher    : $totalMemoryFormatted"
+    Write-Host "CPU-Auslastung                : $cpuUsageFormatted"
+    Write-Host "Verfügbarer Arbeitsspeicher   : $availableMemoryFormatted"
+    Write-Host "Gesamter Arbeitsspeicher      : $totalMemoryFormatted"
+    Write-Host "Festplattenspeicher           : $diskUsageFormatted"
+    Write-Host "Netzwerknutzung               : $networkUsageFormatted"
+    Write-Host "Systemzeit                    : $systemTime"
     Write-Host "---------------------------------------"
 
     Start-Sleep -Seconds 1
