@@ -44,7 +44,7 @@ while ($true) {
 ```
 
 3. Screenshot der PowerShell-Ausgabe:
-![PC-Leistungsübersicht](https://example.com/screenshot.png)
+"C:\Users\A_119591\OneDrive - Kantonsschule Baden\Bilder\Screenshots\Screenshot 2023-07-02 213644.png"
 
 ## Verifikation
 
