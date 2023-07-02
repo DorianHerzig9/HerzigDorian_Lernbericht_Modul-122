@@ -44,7 +44,8 @@ while ($true) {
 ```
 
 3. Screenshot der PowerShell-Ausgabe:
-![Ausgabee]("C:\Users\A_119591\OneDrive - Kantonsschule Baden\Bilder\Screenshots\Screenshot 2023-07-02 213644.png")
+<img width="625" alt="Screenshot 2023-07-02 213644" src="https://github.com/DorianHerzig9/HerzigDorian_Lernbericht_Modul-122/assets/110893245/a4d85428-7db3-4f36-8d4b-b512a157f940">
+
 
 ## Verifikation
 
